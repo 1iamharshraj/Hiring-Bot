@@ -108,11 +108,22 @@ if st.session_state.q_index < len(questions):
             })
         st.rerun()
 else:
-    # Finish
-    with st.chat_message("ai"):
-        st.markdown("🎉 All questions answered! Submitting your data...")
+        # Save data
+        save_to_excel(st.session_state.answers)
 
-    save_to_excel(st.session_state.answers)
-    with st.chat_message("ai"):
-        st.success("✅ Your responses have been saved successfully!")
-        st.json(st.session_state.answers)
+        # Show confirmation
+        with st.chat_message("ai"):
+            st.success("✅ Your responses have been saved successfully!")
+            st.markdown("### 📋 Your Responses:")
+
+            # Display answers nicely
+            for key, value in st.session_state.answers.items():
+                label = key.capitalize().replace("_", " ")
+                st.markdown(f"- **{label}**: {value}")
+
+            # Retake option
+            if st.button("🔄 Retake the Form"):
+                st.session_state.answers = {}
+                st.session_state.q_index = 0
+                st.session_state.chat_history = []
+                st.rerun()
