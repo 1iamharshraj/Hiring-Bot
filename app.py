@@ -90,7 +90,8 @@ for entry in st.session_state.chat_history:
 
 # Input box
 if st.session_state.q_index < len(questions):
-    user_input = st.chat_input(current_q)
+    st.markdown(f"**{current_q}**")  # Displays the question on screen
+    user_input = st.chat_input("Type your response below...")
     if user_input:
         # Validate
         if validate_answer(user_input, current_type):
